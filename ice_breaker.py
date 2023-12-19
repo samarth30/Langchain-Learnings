@@ -1,23 +1,34 @@
 import streamlit as st
+from agents.linkedin_lookup_agent import linkedin_lookup_agent
 from langchain.prompts import PromptTemplate
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import LLMChain
+from third_parties.linkedin import scrape_linkedin_profile
 from dotenv import load_dotenv
 load_dotenv()
 
 
-st.title("Interesting Facts generator")
+st.title("Linkedin Ice Breaker")
 
 information = """"
-Elon Reeve Musk (/ˈiːlɒn/ EE-lon; born June 28, 1971) is a businessman and investor. He is the wealthiest person in the world, with an estimated net worth of US$222 billion as of December 2023, according to the Bloomberg Billionaires Index, and $244 billion according to Forbes, primarily from his ownership stakes in Tesla and SpaceX.[5][6] He is the founder, chairman, CEO, and chief technology officer of SpaceX; angel investor, CEO, product architect and former chairman of Tesla, Inc.; owner, chairman and CTO of X Corp.; founder of the Boring Company and xAI; co-founder of Neuralink and OpenAI; and president of the Musk Foundation.
+AI || ML || Sass Tooling || Chrome extension || Nodejs || React || Full Stack Senior Engineer
 
-A member of the wealthy South African Musk family, Elon was born in Pretoria and briefly attended the University of Pretoria before immigrating to Canada at age 18, acquiring citizenship through his Canadian-born mother. Two years later, he matriculated at Queen's University at Kingston in Canada. Musk later transferred to the University of Pennsylvania, and received bachelor's degrees in economics and physics. He moved to California in 1995 to attend Stanford University. However, Musk dropped out after two days and, with his brother Kimbal, co-founded online city guide software company Zip2. The startup was acquired by Compaq for $307 million in 1999, and, that same year Musk co-founded X.com, a direct bank. X.com merged with Confinity in 2000 to form PayPal.
 
-In October 2002, eBay acquired PayPal for $1.5 billion, and that same year, with $100 million of the money he made, Musk founded SpaceX, a spaceflight services company. In 2004, he became an early investor in electric vehicle manufacturer Tesla Motors, Inc. (now Tesla, Inc.). He became its chairman and product architect, assuming the position of CEO in 2008. In 2006, Musk helped create SolarCity, a solar-energy company that was acquired by Tesla in 2016 and became Tesla Energy. In 2013, he proposed a hyperloop high-speed vactrain transportation system. In 2015, he co-founded OpenAI, a nonprofit artificial intelligence research company. The following year, Musk co-founded Neuralink—a neurotechnology company developing brain–computer interfaces—and the Boring Company, a tunnel construction company. In 2022, he acquired Twitter for $44 billion. He subsequently merged the company into newly created X Corp. and rebranded the service as X the following year. In March 2023, he founded xAI, an artificial intelligence company.
+I am a software engineer and Backend developer with experience in various technologies such as JavaScript, Solidity, Smart Contracts, Blockchain, Web3, TypeScript, Node, Express, Mongo, React, Redux, Git, OOP, jQuery, NoSQL, Java, C, Chai Unit Testing, Frontend, Backend, and Full-Stack development.
+
+I have worked in several positions where I have gained valuable experience. As the Chief Technical Officer and Co-Founder of SignAssist, I designed and implemented a Chrome extension to solve the problem of transaction security and readability in the web3 space. I also developed and provided API as a Service to non-custodial wallets in a B2B capacity and secured frontier.xyz as our client. I assisted in creating a business model for the startup and redirected the direction of the business.
+
+As an Independent Contractor, Full Stack Blockchain Engineer, I managed and directed the development of various projects for over 15 international clients, primarily serving as a Frontend , Solidity and backend engineer. I designed and constructed Backend Architectures of various projects, including an NFT marketplace, initial NFT offerings, token whitelisting with Merkle proofs, NFT minting, NFT subscriptions, ve(3,3), vaults, lending, and borrowing. I also developed scalable APIs and distributed systems and created bots to index on-chain events on the blockchain. Some of the projects I worked on include emillionsart.com, Metria, Diva Protocol, Milkshake Finance, Metalaunch, and Shiboshis.
+
+Lastly, as a Full Stack Blockchain Engineer at Cryption Network in Pune, I built and led the development of Cryption Network Core Smart Contracts. I wrote test cases, collaborated with other team members, and audited smart contracts. I contributed to the growth of the TVL from zero to 10 million USD by optimizing the frontend application built in React and enhancing Web3 integrations. As the second employee, I provided innovative ideas and actively supported the company in securing a 1.5 million dollar funding round.
 """
 
 if __name__ == '__main__':
-    print("hello langchain")
+    # print("hello langchain")
+
+    linkedin_profile_url = 'https://in.linkedin.com/in/samarth30'
+
+    # print(linkedin_profile_url)
 
     summary_template = """" 
     given the linkedin information {information} about a person from i want to create : 
@@ -32,12 +43,19 @@ if __name__ == '__main__':
     chain = LLMChain(llm=llm, prompt=summary_prompt_template)
 
     # elonMuskInterestingFacts = chain.run(information)
+    # print(elonMuskInterestingFacts)
+
+    linkedindata = scrape_linkedin_profile(
+        linkedin_profile_url=linkedin_profile_url)
+    # print(linkedindata)
 
     user_input = st.text_input("Enter your text here")
 
+    # Create a button
     if st.button("Process Text"):
         # Call your function and store the result
-        result = chain.run(user_input)
+        result = chain.run(information=information)
 
+        st.image("https://media.licdn.com/dms/image/D4D03AQHRomotqsqiyg/profile-displayphoto-shrink_400_400/0/1694683690619?e=1708560000&v=beta&t=Nr_UWc5gr1vU5dE_QM4GhHQ7qpDnyxOHJ7qYF0ezuws")
         # Display the result
         st.write(result)
